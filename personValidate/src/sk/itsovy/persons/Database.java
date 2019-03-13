@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Database {
 
@@ -157,4 +159,56 @@ public class Database {
 
         return persons;
     }
+
+
+    public List <Person> selectAllAdult(){
+        Connection conn = getConnection();
+        //String query = "SELECT * FROM persons WHERE dnar <= Current_date() - 18 ";
+        String query = "SELECT * FROM persons WHERE dnar < (Current_date() - INTERVAL 18 YEAR)";
+        List <Person> persons = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                Person p = new Person(rs.getString("FirstName"),rs.getString("LastName"),
+                        rs.getDate("dnar"),rs.getString("bnum"));
+                persons.add(p);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return persons;
+    }
+
+    public Set <String> selectAllFirstName(){
+        Connection conn = getConnection();
+        //String query = "SELECT * FROM persons WHERE dnar <= Current_date() - 18 ";
+        String query = "SELECT FirstName FROM persons";
+        Set <String> persons = new HashSet<>();
+
+        try {
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                String fname = rs.getString("FirstName");
+                persons.add(fname);
+                persons.add(fname);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return persons;
+    }
+
 }

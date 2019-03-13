@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -91,7 +92,7 @@ public class Main {
                         //fileWriter.write("\n"+Str);
                         //System.out.println(fname);
 
-                       System.out.println(date);
+                        System.out.println(date);
 
                         SimpleDateFormat dateformat1 = new SimpleDateFormat("dd-MM-yyyy");
                         Date date1 = null;
@@ -108,17 +109,32 @@ public class Main {
                         db1.insertNewPerson(person1);
                         //System.out.println(db1.selectBySurname("Jarna").getSurname());
                         //System.out.println(db1.selectByBNum("010513/1235").getSurname());
-                        db1.selectWomenNumber();
+                        //db1.selectWomenNumber();
 
-                        List <Person> persons = db1.selectAllMen();
+                        /*List <Person> persons = db1.selectAllMen();
 
                         for(int i=1; i<persons.size();i++){
                             System.out.println(persons.get(i).getName()+" "+persons.get(i).getSurname());
-                        }
-
-                        /*for(int i = 0; i < db1.selectAllMen().size(); i++) {
-                            System.out.printf("\n %s", db1.selectAllMen().get(i).getName());
                         }*/
+
+                        /*List <Person> persons2 = db1.selectAllAdult();
+
+                        for(int i=1; i<persons2.size();i++) {
+                            System.out.println(persons2.get(i).getName() + " " + persons2.get(i).getSurname());
+
+                        }*/
+
+                        Set <String> persons2 = db1.selectAllFirstName();
+
+                        /*for(int i=1; i<persons2.size();i++) {
+                            System.out.println(persons2);
+
+                        }*/
+
+                        //System.out.println(persons2);
+                        for(String ccc: persons2){
+                            System.out.println(ccc);
+                        }
 
                     }
                 }
