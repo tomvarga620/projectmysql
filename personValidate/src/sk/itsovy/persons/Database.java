@@ -211,4 +211,33 @@ public class Database {
         return persons;
     }
 
+
+    public List <Person> selectAll(){
+        Connection conn = getConnection();
+        //String query = "SELECT * FROM persons WHERE dnar <= Current_date() - 18 ";
+        String query = "SELECT * FROM persons B";
+        List <Person> persons = new ArrayList<>();
+
+        try {
+            PreparedStatement pst = null;
+            ResultSet rs = null;
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            while (rs.next()) {
+
+                Person p = new Person(rs.getString("FirstName"),rs.getString("LastName"),
+                        rs.getDate("dnar"),rs.getString("bnum"));
+                persons.add(p);
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+
+        return persons;
+    }
+
+
+
+
 }

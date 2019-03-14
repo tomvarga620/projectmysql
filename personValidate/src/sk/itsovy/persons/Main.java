@@ -1,5 +1,18 @@
 package sk.itsovy.persons;
 
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.util.Date;
 import java.io.*;
 import java.text.ParseException;
@@ -124,7 +137,7 @@ public class Main {
 
                         }*/
 
-                        Set <String> persons2 = db1.selectAllFirstName();
+                       // Set <String> persons2 = db1.selectAllFirstName();
 
                         /*for(int i=1; i<persons2.size();i++) {
                             System.out.println(persons2);
@@ -132,9 +145,52 @@ public class Main {
                         }*/
 
                         //System.out.println(persons2);
-                        for(String ccc: persons2){
+                        /*for(String ccc: persons2){
                             System.out.println(ccc);
+                        }*/
+
+                        List <Person> persons = db1.selectAll();
+
+                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                        Document doc = docBuilder.newDocument();
+
+                        Element rootPersons = doc.createElement("Persons");
+                        doc.appendChild(rootPersons);
+
+                        for(int i=1; i<persons.size();i++) {
+
+                            System.out.println(persons.get(i).getName() + " " + persons.get(i).getSurname());
+
+                            Element person = doc.createElement("Person");
+                            rootPersons.appendChild(person);
+
+                            Element name = doc.createElement("FirstName");
+                            name.appendChild(doc.createTextNode(persons.get(i).getName()));// tu meno
+                            person.appendChild(name);
+
+                            Element lastname = doc.createElement("LastName");
+                            lastname.appendChild(doc.createTextNode(persons.get(i).getSurname()));// tu priezvisko
+                            person.appendChild(lastname);
+
+                            Element dnar = doc.createElement("Date");
+                            dnar.appendChild(doc.createTextNode(persons.get(i).getDob().toString()));// tu date
+                            person.appendChild(dnar);
+
+                            Element birthnum = doc.createElement("BirthNumber");
+                            birthnum.appendChild(doc.createTextNode(persons.get(i).getBnum()));// tu bnum
+                            person.appendChild(birthnum);
+
                         }
+
+                        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                        Transformer transformer = transformerFactory.newTransformer();
+                        DOMSource source = new DOMSource(doc);
+                        StreamResult result = new StreamResult(new File("file.xml"));
+
+                        transformer.transform(source, result);
+
+                        System.out.println("File saved!");
 
                     }
                 }
@@ -144,6 +200,12 @@ public class Main {
             fileWriter.close();
         }
         catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerConfigurationException e) {
+            e.printStackTrace();
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
 
